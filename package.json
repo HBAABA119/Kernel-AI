@@ -1,0 +1,79 @@
+{
+  "name": "kernelai",
+  "version": "1.0.0",
+  "description": "High-performance PC Optimization and Storage Intelligence tool powered by Google Gen AI",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:electron\"",
+    "dev:next": "next dev src/renderer",
+    "dev:electron": "wait-on http://localhost:3000 && NODE_ENV=development electron .",
+    "build": "npm run build:next && npm run build:electron",
+    "build:next": "next build src/renderer",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "start": "electron .",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "pc-optimization",
+    "storage-intelligence",
+    "electron",
+    "nextjs",
+    "gemini",
+    "ai-agent",
+    "windows",
+    "system-tools"
+  ],
+  "author": "KernelAI Team",
+  "license": "MIT",
+  "dependencies": {
+    "@google/genai": "^0.1.0",
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "autoprefixer": "^10.4.18",
+    "concurrently": "^8.2.2",
+    "electron": "^29.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.0",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.kernelai.app",
+    "productName": "KernelAI",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "src/renderer/out/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  }
+}
