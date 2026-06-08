@@ -3,17 +3,15 @@
  * Universal state machine for AI agent interactions, scans, and execution
  */
 
-import { create } from 'zustand';
-import { 
+import { create } from 'zustand';import { 
   SystemSpecs, 
   DiskScanResult, 
   ChatMessage, 
   AIActionPlan, 
-  ExecutionLogEntry,
-  SkillFile,
-  SkillCheckResult,
-  MessageRole 
-} from '../../shared/types';
+  ExecutionLogEntry, 
+  SkillFile, 
+  SkillCheckResult 
+} from '../../../shared/types';
 
 // ============================================================================
 // Store State Interface
@@ -70,7 +68,7 @@ interface AgentStoreActions {
   saveSkillToCache: (skill: SkillFile) => void;
 }
 
-type AgentStore = AgentStoreState & AgentStoreActions;
+type AgentStore = AgentStoreState;
 
 // ============================================================================
 // Helper Functions
@@ -201,7 +199,7 @@ export const useAgentStore = create<AgentStore>((set, get) => ({
         // Note: In a real implementation, this would call a backend endpoint
         // that uses the @google/genai SDK
         
-        const aiResponse = await callGeminiAPI(normalizedPrompt, get().state);
+        const aiResponse = await callGeminiAPI(normalizedPrompt, get());
         
         if (aiResponse.actionPlan) {
           // Save the new skill

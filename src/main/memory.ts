@@ -4,7 +4,7 @@
  */
 
 import { promises as fs } from 'fs';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import { app } from 'electron';
 import { SkillFile, SkillCheckResult, AIActionPlan } from '../shared/types';
 
@@ -166,7 +166,6 @@ function getSkillFilePath(context: string): string {
 async function saveSkillFile(context: string, plan: AIActionPlan): Promise<SkillFile> {
   await ensureDirectories();
   
-  const sanitized = sanitizeContext(context);
   const skillFilePath = getSkillFilePath(context);
   
   const now = new Date().toISOString();

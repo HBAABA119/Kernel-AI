@@ -270,12 +270,12 @@ export default function KernelAIPage() {
   // Handle message send from chat
   useEffect(() => {
     const handleMessage = (event: CustomEvent<string>) => {
-      actions.submitAgentPrompt(event.detail);
+      useAgentStore.getState().actions.submitAgentPrompt(event.detail);
     };
     
     window.addEventListener('send-message' as any, handleMessage as any);
     return () => window.removeEventListener('send-message' as any, handleMessage as any);
-  }, [actions]);
+  }, []);
   
   return (
     <div className="h-screen w-screen bg-[#05070B] text-white overflow-hidden flex flex-col">

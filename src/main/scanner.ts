@@ -4,8 +4,8 @@
  */
 
 import { promises as fs } from 'fs';
-import { join, basename, dirname } from 'path';
-import { homedir } from 'os';
+import { join, basename } from 'path';
+
 import { DiskScanResult, FlaggedFolder, FolderCategory, RiskLevel } from '../shared/types';
 
 // ============================================================================
@@ -275,7 +275,7 @@ export class DirectoryScanner {
       
       // Token Economy: Only flag folders above threshold
       if (totalSize >= SIZE_THRESHOLD_BYTES) {
-        const relativePath = currentPath.replace(rootPath, '') || currentPath;
+
         const category = categorizeFolder(currentPath);
         const sizeGB = formatBytes(totalSize);
         const riskLevel = getRiskLevel(sizeGB, category);

@@ -3,12 +3,12 @@
  * Implements Windows System Restore Point creation and rollback ledger management
  */
 
-import { exec, spawn } from 'child_process';
+import { exec } from 'child_process';
 import { promisify } from 'util';
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
 import { app } from 'electron';
-import { AIActionPlan, AIActionItem, ExecutionLogEntry, RiskLevel } from '../shared/types';
+import { AIActionPlan, ExecutionLogEntry } from '../shared/types';
 
 const execAsync = promisify(exec);
 
@@ -62,7 +62,7 @@ interface LedgerEntry {
     actionId: string;
     script: string;
     rollbackScript: string;
-    status: 'pending' | 'completed' | 'failed';
+    status: 'pending' | 'running' | 'completed' | 'failed' | 'rolled_back';
   }>;
   restorePointCreated: boolean;
   restorePointId?: string;
@@ -261,15 +261,7 @@ async function addToLedger(entry: LedgerEntry): Promise<void> {
   await writeLedger(entries);
 }
 
-async function updateLedgerEntry(planId: string, updates: Partial<LedgerEntry>): Promise<void> {
-  const entries = await readLedger();
-  const index = entries.findIndex((e) => e.planId === planId);
-  
-  if (index !== -1) {
-    entries[index] = { ...entries[index], ...updates };
-    await writeLedger(entries);
-  }
-}
+
 
 // ============================================================================
 // Executor Class

@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { FlaggedFolder, RiskLevel } from '../../../shared/types';
 
 // ============================================================================
@@ -242,6 +242,7 @@ export const Treemap: React.FC<TreemapProps> = ({
     y: -1,
     node: null,
   });
+  const [tooltip, setTooltip] = useState<{ x: number; y: number; node: TreemapNode } | null>(null);
 
   // Generate treemap layout
   const generateLayout = useCallback(() => {
@@ -361,6 +362,13 @@ export const Treemap: React.FC<TreemapProps> = ({
       
       hoverRef.current = { x, y, node: hoveredNode };
       
+      // Update tooltip state for re-render
+      if (hoveredNode) {
+        setTooltip({ x, y, node: hoveredNode });
+      } else {
+        setTooltip(null);
+      }
+      
       // Redraw to show hover effect
       draw();
     },
@@ -450,23 +458,23 @@ export const Treemap: React.FC<TreemapProps> = ({
       </div>
       
       {/* Tooltip */}
-      {hoverRef.current.node && (
+      {tooltip && (
         <div
           className="absolute pointer-events-none bg-black/90 backdrop-blur-md px-3 py-2 rounded-lg border border-white/10 shadow-xl"
           style={{
-            left: Math.min(hoverRef.current.x + 15, width - 200),
-            top: Math.min(hoverRef.current.y + 15, height - 150),
+            left: Math.min(tooltip.x + 15, width - 200),
+            top: Math.min(tooltip.y + 15, height - 150),
             maxWidth: '280px',
           }}
         >
           <div className="text-white font-medium text-sm mb-1">
-            {truncateText(hoverRef.current.node.folder.path, 50)}
+            {truncateText(tooltip.node.folder.path, 50)}
           </div>
           <div className="text-white/70 text-xs space-y-1">
-            <div>Size: {formatSize(hoverRef.current.node.folder.sizeGB)}</div>
-            <div>Files: {hoverRef.current.node.folder.fileCount.toLocaleString()}</div>
-            <div>Category: {hoverRef.current.node.folder.category}</div>
-            <div>Risk: {hoverRef.current.node.folder.riskLevel}</div>
+            <div>Size: {formatSize(tooltip.node.folder.sizeGB)}</div>
+            <div>Files: {tooltip.node.folder.fileCount.toLocaleString()}</div>
+            <div>Category: {tooltip.node.folder.category}</div>
+            <div>Risk: {tooltip.node.folder.riskLevel}</div>
           </div>
         </div>
       )}

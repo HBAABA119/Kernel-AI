@@ -295,7 +295,11 @@ const ActionPlanCard: React.FC<{
   );
 };
 
-const ChatBubble: React.FC<{ message: ChatMessage }> = ({ message }) => {
+const ChatBubble: React.FC<{
+  message: ChatMessage;
+  onDeployPlan: (plan: AIActionPlan) => void;
+  onRollback: () => void;
+}> = ({ message, onDeployPlan, onRollback }) => {
   const isUser = message.role === 'user';
   const isSystem = message.role === 'system';
   
@@ -325,8 +329,8 @@ const ChatBubble: React.FC<{ message: ChatMessage }> = ({ message }) => {
           <div className="mt-3">
             <ActionPlanCard
               plan={message.actionPlan}
-              onDeploy={() => {}}
-              onRollback={() => {}}
+              onDeploy={() => onDeployPlan(message.actionPlan!)}
+              onRollback={onRollback}
             />
           </div>
         )}
@@ -412,7 +416,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
         ) : (
           <>
             {messages.map((message) => (
-              <ChatBubble key={message.id} message={message} />
+              <ChatBubble key={message.id} message={message} onDeployPlan={onDeployPlan} onRollback={onRollback} />
             ))}
             {isLoading && <TypingIndicator />}
           </>
